@@ -10,14 +10,17 @@
 
 class IntegrationDomain {
 public:
-    void addBounds(std::pair<float, float> bounds);
-    void calculateVertices();
-    float getDimension(int axis);
-    std::vector<float> getBaseVertex();
+    explicit IntegrationDomain(char* filename);
+    float getDimension(int axis) { return dimensions.at(axis); }
+    std::vector<float> getBaseVertex() { return baseVertex; }
+    size_t getNDimensions() const{ return nDimensions; }
 
 private:
+    size_t nDimensions{};
     std::vector<float> dimensions;
     std::vector<float> baseVertex;
+
+    void addBounds(std::pair<float, float>);
 
 };
 
