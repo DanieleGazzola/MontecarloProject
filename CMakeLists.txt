@@ -3,5 +3,14 @@ project(MontecarloProject)
 
 set(CMAKE_CXX_STANDARD 14)
 
+set(PROJECT_HEADERS
+        Code/IntegrationDomain.h
+        )
+
+set(PROJECT_SOURCES
+        Code/main.cpp
+        Code/IntegrationDomain.cpp)
+
 add_executable(MontecarloProject
-        Code/main.cpp)
+        ${PROJECT_SOURCES}
+        ${PROJECT_HEADERS})
