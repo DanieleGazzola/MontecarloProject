@@ -3,7 +3,7 @@
 //
 
 /* input file is formatted:
- * first line: n dimensions
+ * first line: domain dimension
  * other n lines: bounds for each dimension
  * */
 
@@ -14,8 +14,6 @@ int main(int argc, char** argv){
     if(argc != 2 ) return -1;
 
     IntegrationDomain domain(argv[1]);
-
-
 
     return 0;
 }
