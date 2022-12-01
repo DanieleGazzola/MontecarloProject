@@ -27,9 +27,7 @@ private:
     std::vector<std::pair<float, float>> bounds;
 
     void calculateModOmega(){
-        float hyperVolume = 1.;const auto dt = timeit([&]() {
-    I = montecarlo([](auto x) { return std::sqrt(1 - x * x); }, N);
-    });
+        float hyperVolume = 1.;
         for (auto bound : bounds)
             hyperVolume *= std::abs(bound.first - bound.second);
 

@@ -9,14 +9,17 @@
 
 #include "Geometry.hpp"
 #include "HyperRectangle.cpp"
+#include "mpi.h"
 
 int main(int argc, char** argv){
 
     if(argc != 2 ) return -1;
 
+    MPI_Init(NULL, NULL);
+
     HyperRectangle domain(argv[1]);
 
-
+    std::cout << domain.getNDimensions();
 
     return 0;
 }

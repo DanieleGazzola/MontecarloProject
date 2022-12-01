@@ -11,7 +11,7 @@
 class Geometry {
 public:
     Geometry()= default;
-    virtual std::vector<float> generatePoint();
+    virtual std::vector<float> generatePoint(){ return {}; };
     size_t getNDimensions() const { return nDimensions; }
     float getModOmega() const { return modOmega; }
 
@@ -20,7 +20,5 @@ protected:
     float modOmega{};
 
 };
-
-
 
 #endif //MONTECARLOPROJECT_INTEGRATIONDOMAIN_H
