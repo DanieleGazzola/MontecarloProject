@@ -7,13 +7,16 @@
  * other n lines: bounds for each dimension
  * */
 
-#include "IntegrationDomain.h"
+#include "Geometry.hpp"
+#include "HyperRectangle.cpp"
 
 int main(int argc, char** argv){
 
     if(argc != 2 ) return -1;
 
-    IntegrationDomain domain(argv[1]);
+    HyperRectangle domain(argv[1]);
+
+
 
     return 0;
 }
