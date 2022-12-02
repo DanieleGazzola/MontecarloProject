@@ -26,6 +26,7 @@
 #include <cmath>
 
 int main(int argc, char** argv){
+
     if(argc != 4)
         return -1;
 
@@ -48,11 +49,14 @@ int main(int argc, char** argv){
         return -1;
     }
 
-    montecarlo.integrate([](std::vector<float> x) { return std::sqrt(1 - x.at(0) * x.at(0)); }, N, domain);
+    Montecarlo::integrate([](std::vector<float> x) { return std::sqrt(1 - x.at(0) * x.at(0)); }, N, domain);
 
-    if(rank == 0)
+    if(rank == 0){
         std::cout << "Integral: " << montecarlo.getIntegral() << std::endl
-        << "Variance: " << montecarlo.getVariance() << std::endl;
+                  << "Estimated error: " << std::sqrt(montecarlo.getVariance()) << std::endl;
+        std::cout << "Domain dimension: " << domain->getNDimensions() << std::endl
+                  << "Domain volume: " << domain->getModOmega() << std::endl;
+    }
 
     MPI_Finalize();
 
