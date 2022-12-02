@@ -34,10 +34,11 @@ public:
 
         const int seed = (rank + 1) * (i + 1);
         std::mt19937 engine(seed);
-        std::uniform_real_distribution<double> distribution(0., 1.);
 
-        for (int j = 0; j < nDimensions; ++j)
-            point.at(j) = bounds.at(j).first + distribution(engine) * std::abs(bounds.at(j).first - bounds.at(j).second);
+        for (int j = 0; j < nDimensions; ++j){
+            std::uniform_real_distribution<double> distribution(bounds.at(j).first, bounds.at(j).second);
+            point.at(j) = distribution(engine);
+        }
 
         return point;
     }

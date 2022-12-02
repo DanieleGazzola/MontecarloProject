@@ -4,6 +4,7 @@
 
 #include <functional>
 #include <vector>
+#include <cmath>
 #include "Geometry.hpp"
 #include "mpi.h"
 #include <omp.h>
@@ -26,8 +27,10 @@ public:
         for (int i = 0; i < mySamples; ++i) {
             auto sample = domain->generatePoint(rank, i);
             auto fi = f(sample);
-            mySum += fi;
-            mySumSquared += fi * fi;
+            if(!std::isnan(fi)){
+                mySum += fi;
+                mySumSquared += fi * fi;
+            }
         }
 
         if(rank != 0){
