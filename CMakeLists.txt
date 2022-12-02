@@ -11,6 +11,9 @@ set(PROJECT_HEADERS
 
 set(PROJECT_SOURCES
         Code/main.cpp
+        Code/HyperRectangle.cpp
+        Code/HyperSphere.cpp
+        Code/Montecarlo.cpp
         )
 
 add_executable(MontecarloProject

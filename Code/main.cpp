@@ -12,12 +12,18 @@
  * input file is formatted:
  * first line: domain dimension
  * other n lines: bounds for each dimension
+ *
+ * or
+ *
+ * first line: domain dimension
+ * second line: sphere's centre in n dimensions
  * */
 
-#include "Geometry.hpp"
+#include "Montecarlo.cpp"
 #include "HyperRectangle.cpp"
 #include "HyperSphere.cpp"
 #include "mpi.h"
+#include <cmath>
 
 int main(int argc, char** argv){
     if(argc != 4)
@@ -30,7 +36,7 @@ int main(int argc, char** argv){
 
     auto domainType = strtol(argv[1], nullptr, 10);
     auto N = strtol(argv[2], nullptr, 10);
-    float integral = 0.;
+    Montecarlo montecarlo{};
 
     Geometry* domain;
 
@@ -42,10 +48,11 @@ int main(int argc, char** argv){
         return -1;
     }
 
-    //integral = montecarlo(f, N, domain);
+    montecarlo.integrate([](std::vector<float> x) { return std::sqrt(1 - x.at(0) * x.at(0)); }, N, domain);
 
     if(rank == 0)
-        std::cout << "Integral: " << integral;
+        std::cout << "Integral: " << montecarlo.getIntegral() << std::endl
+        << "Variance: " << montecarlo.getVariance() << std::endl;
 
     MPI_Finalize();
 

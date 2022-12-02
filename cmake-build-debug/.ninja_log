@@ -1,13 +1,13 @@
 # ninja log v5
-10	815	6916085906982918	CMakeFiles/MontecarloProject.dir/Code/main.cpp.obj	d9821852b3fb7b7d
-817	1018	6916085908949116	MontecarloProject.exe	50ff067932eb82ad
-532	669	6914491917055191	untitled1.exe	2507dba5800235d8
-6	6019	6916087833621957	build.ninja	85c08edd264fa6a1
-6	995	6916088083835188	CMakeFiles/MontecarloProject.dir/Code/main.cpp.obj	a185a052453da96
-997	1245	6916088086247348	MontecarloProject.exe	50ff067932eb82ad
-7	1045	6916088844358236	CMakeFiles/MontecarloProject.dir/Code/main.cpp.obj	a185a052453da96
-1047	1289	6916088846739105	MontecarloProject.exe	50ff067932eb82ad
-7	812	6916100935701877	CMakeFiles/MontecarloProject.dir/Code/main.cpp.obj	a185a052453da96
-814	1222	6916100939759806	MontecarloProject.exe	50ff067932eb82ad
 6	1322	6916111460136537	CMakeFiles/MontecarloProject.dir/Code/main.cpp.obj	a185a052453da96
 1324	1862	6916111465485140	MontecarloProject.exe	50ff067932eb82ad
+532	669	6914491917055191	untitled1.exe	2507dba5800235d8
+6	6019	6916844757789741	build.ninja	85c08edd264fa6a1
+28	628	6916844771040419	CMakeFiles/MontecarloProject.dir/Code/Montecarlo.cpp.obj	3f6f32ab0dc42f3f
+12	630	6916844771040419	CMakeFiles/MontecarloProject.dir/Code/HyperRectangle.cpp.obj	3e5128d8c811230c
+20	631	6916844771060472	CMakeFiles/MontecarloProject.dir/Code/HyperSphere.cpp.obj	391359e0d7007728
+16	506	6916846733164161	CMakeFiles/MontecarloProject.dir/Code/HyperSphere.cpp.obj	391359e0d7007728
+22	510	6916846733184177	CMakeFiles/MontecarloProject.dir/Code/Montecarlo.cpp.obj	3f6f32ab0dc42f3f
+10	534	6916846733455875	CMakeFiles/MontecarloProject.dir/Code/HyperRectangle.cpp.obj	3e5128d8c811230c
+4	815	6916846736265245	CMakeFiles/MontecarloProject.dir/Code/main.cpp.obj	a185a052453da96
+816	987	6916846737953682	MontecarloProject.exe	6ddf0acdb81b705e
