@@ -49,8 +49,8 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "C:/Users/danie/Documents/HPC/Docker/shared-folder/MontecarloProject/cmake-build-debug",
-		"source" : "C:/Users/danie/Documents/HPC/Docker/shared-folder/MontecarloProject"
+		"build" : "C:/Users/danie/CLionProjects/MontecarloProject/cmake-build-debug",
+		"source" : "C:/Users/danie/CLionProjects/MontecarloProject"
 	},
 	"version" : 
 	{

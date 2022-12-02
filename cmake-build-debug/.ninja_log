@@ -1,7 +1,13 @@
 # ninja log v5
-8	1017	6916082870182326	CMakeFiles/MontecarloProject.dir/Code/main.cpp.obj	f559240144cdadc1
-1049	1325	6916081493309330	MontecarloProject.exe	57f2032a7270b909
-532	669	6914491917055191	untitled1.exe	2507dba5800235d8
-6	6019	6916085890695754	build.ninja	85c08edd264fa6a1
 10	815	6916085906982918	CMakeFiles/MontecarloProject.dir/Code/main.cpp.obj	d9821852b3fb7b7d
 817	1018	6916085908949116	MontecarloProject.exe	50ff067932eb82ad
+532	669	6914491917055191	untitled1.exe	2507dba5800235d8
+6	6019	6916087833621957	build.ninja	85c08edd264fa6a1
+6	995	6916088083835188	CMakeFiles/MontecarloProject.dir/Code/main.cpp.obj	a185a052453da96
+997	1245	6916088086247348	MontecarloProject.exe	50ff067932eb82ad
+7	1045	6916088844358236	CMakeFiles/MontecarloProject.dir/Code/main.cpp.obj	a185a052453da96
+1047	1289	6916088846739105	MontecarloProject.exe	50ff067932eb82ad
+7	812	6916100935701877	CMakeFiles/MontecarloProject.dir/Code/main.cpp.obj	a185a052453da96
+814	1222	6916100939759806	MontecarloProject.exe	50ff067932eb82ad
+6	1322	6916111460136537	CMakeFiles/MontecarloProject.dir/Code/main.cpp.obj	a185a052453da96
+1324	1862	6916111465485140	MontecarloProject.exe	50ff067932eb82ad

@@ -55,7 +55,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "c:/Users/danie/Documents/HPC/Docker/shared-folder/MontecarloProject/cmake-build-debug"
+			"value" : "c:/Users/danie/CLionProjects/MontecarloProject/cmake-build-debug"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -623,7 +623,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "C:/Users/danie/Documents/HPC/Docker/shared-folder/MontecarloProject"
+			"value" : "C:/Users/danie/CLionProjects/MontecarloProject"
 		},
 		{
 			"name" : "CMAKE_INSTALL_PREFIX",
@@ -1270,10 +1270,6 @@
 			"properties" : 
 			[
 				{
-					"name" : "ADVANCED",
-					"value" : "1"
-				},
-				{
 					"name" : "HELPSTRING",
 					"value" : "Executable for running MPI programs."
 				}
@@ -1679,7 +1675,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "C:/Users/danie/Documents/HPC/Docker/shared-folder/MontecarloProject/cmake-build-debug"
+			"value" : "C:/Users/danie/CLionProjects/MontecarloProject/cmake-build-debug"
 		},
 		{
 			"name" : "MontecarloProject_IS_TOP_LEVEL",
@@ -1703,7 +1699,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "C:/Users/danie/Documents/HPC/Docker/shared-folder/MontecarloProject"
+			"value" : "C:/Users/danie/CLionProjects/MontecarloProject"
 		},
 		{
 			"name" : "PKG_CONFIG_ARGN",

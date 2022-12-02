@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/danie/Documents/HPC/Docker/shared-folder/MontecarloProject
+# Install script for directory: C:/Users/danie/CLionProjects/MontecarloProject
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "C:/Users/danie/Documents/HPC/Docker/shared-folder/MontecarloProject/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "C:/Users/danie/CLionProjects/MontecarloProject/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
