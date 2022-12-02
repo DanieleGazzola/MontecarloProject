@@ -10,8 +10,8 @@
 
 class Montecarlo {
 public:
-    Montecarlo()= default;
-    static void integrate(const std::function<float(std::vector<float>)>& f, long N, Geometry* domain){
+    Montecarlo() = default;
+    void integrate(const std::function<double(std::vector<double>)>& f, long N, Geometry* domain){
 
         int rank, size;
         MPI_Comm_rank(MPI_COMM_WORLD, &rank);
@@ -20,15 +20,41 @@ public:
         MPI_Bcast(&N, 1, MPI_LONG, 0, MPI_COMM_WORLD);
 
         const long mySamples = N / size + (rank < (N % size));
+        double mySum = 0.;
+        double mySumSquared = 0.;
 
+        for (int i = 0; i < mySamples; ++i) {
+            auto sample = domain->generatePoint(rank, i);
+            auto fi = f(sample);
+            mySum += fi;
+            mySumSquared += fi * fi;
+        }
+
+        if(rank != 0){
+            MPI_Send(&mySum, 1, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD);
+            MPI_Send(&mySumSquared, 1, MPI_DOUBLE, 0, 1, MPI_COMM_WORLD);
+        } else {
+            for (int i = 1; i < size; ++i) {
+                double temp1, temp2;
+                MPI_Recv(&temp1, 1, MPI_DOUBLE, i, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+                MPI_Recv(&temp2, 1, MPI_DOUBLE, i, 1, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+                mySum += temp1;
+                mySumSquared += temp2;
+            }
+        }
+
+        if(rank == 0){
+            integral = domain->getModOmega() * mySum / N;
+            variance = domain->getModOmega() * domain->getModOmega() * ((mySumSquared - (mySum * mySum) / N) / (N - 1)) / N;
+        }
 
     };
 
-    float getIntegral() const { return integral; }
-    float getVariance() const { return variance; }
+    double getIntegral() const { return integral; }
+    double getVariance() const { return variance; }
 
 private:
-    float integral;
-    float variance;
+    double integral;
+    double variance;
 
 };

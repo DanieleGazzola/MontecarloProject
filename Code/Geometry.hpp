@@ -11,13 +11,13 @@
 class Geometry {
 public:
     Geometry()= default;
-    virtual std::vector<float> generatePoint(){ return {}; };
+    virtual std::vector<double> generatePoint(int rank, int i) = 0;
     size_t getNDimensions() const { return nDimensions; }
-    float getModOmega() const { return modOmega; }
+    double getModOmega() const { return modOmega; }
 
 protected:
     size_t nDimensions{};
-    float modOmega{};
+    double modOmega{};
 
 };
 

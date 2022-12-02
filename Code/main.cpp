@@ -49,7 +49,7 @@ int main(int argc, char** argv){
         return -1;
     }
 
-    Montecarlo::integrate([](std::vector<float> x) { return std::sqrt(1 - x.at(0) * x.at(0)); }, N, domain);
+    montecarlo.integrate([](std::vector<double> x) { return std::sqrt(1 - x.at(0) * x.at(0)); }, N, domain);
 
     if(rank == 0){
         std::cout << "Integral: " << montecarlo.getIntegral() << std::endl

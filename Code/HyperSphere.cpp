@@ -24,9 +24,14 @@ public:
         calculateModOmega();
     }
 
+    std::vector<double> generatePoint(int rank, int i) override{
+
+        return {};
+    }
+
 private:
-    float radius{};
-    std::vector<float> centre;
+    double radius{};
+    std::vector<double> centre;
 
     void calculateModOmega(){
         //da fare
