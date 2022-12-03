@@ -24,6 +24,7 @@
 #include "HyperSphere.cpp"
 #include "mpi.h"
 #include <cmath>
+#include <chrono>
 
 int main(int argc, char** argv){
 
@@ -49,13 +50,19 @@ int main(int argc, char** argv){
         return -1;
     }
 
+    auto start = std::chrono::system_clock::now();
+
     montecarlo.integrate([](std::vector<double> x) { return std::sqrt(1 - x.at(0) * x.at(0) - x.at(1) * x.at(1)); }, N, domain);
+
+    auto end = std::chrono::system_clock::now();
+    std::chrono::duration<double> elapsed_seconds = end-start;
 
     if(rank == 0){
         std::cout << "Integral: " << montecarlo.getIntegral() << std::endl
                   << "Estimated error: " << std::sqrt(montecarlo.getVariance()) << std::endl;
         std::cout << "Domain dimension: " << domain->getNDimensions() << std::endl
                   << "Domain volume: " << domain->getModOmega() << std::endl;
+        std::cout << "Elapsed time: " << elapsed_seconds.count() << " s" << std::endl;
     }
 
     MPI_Finalize();

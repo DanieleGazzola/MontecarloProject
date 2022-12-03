@@ -7,7 +7,6 @@
 #include <cmath>
 #include "Geometry.hpp"
 #include "mpi.h"
-#include <omp.h>
 
 class Montecarlo {
 public:
@@ -24,6 +23,7 @@ public:
         double mySum = 0.;
         double mySumSquared = 0.;
 
+        #pragma omp parallel for default(none) firstprivate(mySamples, domain, rank, f) reduction(+ : mySum , mySumSquared)
         for (int i = 0; i < mySamples; ++i) {
             auto sample = domain->generatePoint(rank, i);
             auto fi = f(sample);
