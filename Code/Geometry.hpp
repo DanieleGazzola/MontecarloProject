@@ -12,11 +12,11 @@ class Geometry {
 public:
     Geometry()= default;
     virtual std::vector<double> generatePoint(int rank, int i) = 0;
-    size_t getNDimensions() const { return nDimensions; }
+    int getNDimensions() const { return nDimensions; }
     double getModOmega() const { return modOmega; }
 
 protected:
-    size_t nDimensions{};
+    int nDimensions{};
     double modOmega{};
 
 };
