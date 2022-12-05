@@ -16,7 +16,8 @@
  * or
  *
  * first line: domain dimension
- * second line: sphere's centre in n dimensions
+ * second line: radius
+ * third line: sphere's centre in n dimensions
  * */
 
 #include "Montecarlo.cpp"
@@ -52,7 +53,7 @@ int main(int argc, char** argv){
 
     auto start = std::chrono::system_clock::now();
 
-    montecarlo.integrate([](std::vector<double> x) { return std::sqrt(1 - x.at(0) * x.at(0) - x.at(1) * x.at(1)); }, N, domain);
+    montecarlo.integrate([](std::vector<double> x) { return x.at(0) + x.at(1); }, N, domain);
 
     auto end = std::chrono::system_clock::now();
     std::chrono::duration<double> elapsed_seconds = end-start;

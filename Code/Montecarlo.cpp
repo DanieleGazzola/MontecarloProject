@@ -19,11 +19,13 @@ public:
 
         MPI_Bcast(&N, 1, MPI_LONG, 0, MPI_COMM_WORLD);
 
+        MPI_Barrier(MPI_COMM_WORLD);
+
         const long mySamples = N / size + (rank < (N % size));
         double mySum = 0.;
         double mySumSquared = 0.;
 
-        #pragma omp parallel for default(none) firstprivate(mySamples, domain, rank, f) reduction(+ : mySum , mySumSquared)
+        #pragma omp parallel for default(none) shared(mySamples, domain, rank, f) reduction(+ : mySum , mySumSquared)
         for (int i = 0; i < mySamples; ++i) {
             auto sample = domain->generatePoint(rank, i);
             auto fi = f(sample);
@@ -45,6 +47,8 @@ public:
                 mySumSquared += temp2;
             }
         }
+
+        MPI_Barrier(MPI_COMM_WORLD);
 
         if(rank == 0){
             integral = domain->getModOmega() * mySum / N;
