@@ -13,3 +13,24 @@ To use the muparser library, you should include it when compiling the program as
 g++ -I../muparser-2.3.4/include prova.cpp -o prova -L../muparser-2.3.4 -lmuparser
 ./prova
 ```
+
+Command line arguments
+---
+```
+Domain type: 
+    0- Hyper-Rectangle
+    1- Hyper-Sphere
+Number of samples
+Input file path
+```
+
+Input file arguments
+---
+```
+First row: Function used
+Second row: Domain dimension
+In case of Hyper-Rectangle - successive rows:
+    Extreme values for each bounds
+In case of Hyper-Sphere - successive row:
+    Hyper-sphere's centre and radius
+```

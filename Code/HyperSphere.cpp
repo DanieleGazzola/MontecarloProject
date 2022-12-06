@@ -13,6 +13,9 @@ public:
         std::ifstream inFile;
         inFile.open(filename, std::ios_base::in);
 
+        char *f = nullptr;
+        inFile >> f;
+
         inFile >> nDimensions;
         centre.reserve(nDimensions);
         centre.resize(nDimensions);
