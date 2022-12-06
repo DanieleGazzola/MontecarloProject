@@ -14,7 +14,7 @@ g++ -I../muparser-2.3.4/include prova.cpp -o prova -L../muparser-2.3.4 -lmuparse
 ./prova
 ```
 
-Command line arguments
+## Command line arguments
 ---
 ```
 Domain type: 
@@ -24,7 +24,7 @@ Number of samples
 Input file path
 ```
 
-Input file arguments
+## Input file arguments
 ---
 ```
 First row: Function used
@@ -33,4 +33,11 @@ In case of Hyper-Rectangle - successive rows:
     Extreme values for each bounds
 In case of Hyper-Sphere - successive row:
     Hyper-sphere's centre and radius
+```
+
+## Compiling Example
+---
+```
+mpic++ -I../muparser-2.3.4/include main.cpp -o main -L../muparser-2.3.4 -lmuparser -Wall
+./main 0 10 ../input 
 ```

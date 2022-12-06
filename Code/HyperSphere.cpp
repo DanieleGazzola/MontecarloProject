@@ -6,6 +6,7 @@
 #include <fstream>
 #include <cmath>
 #include <random>
+#include <string>
 
 class HyperSphere : public Geometry{
 public:
