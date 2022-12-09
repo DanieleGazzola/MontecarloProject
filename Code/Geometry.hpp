@@ -12,13 +12,15 @@
 class Geometry {
     public:
         Geometry()= default;
-        virtual std::vector<double> generatePoint(int rank, int i) = 0;
-        const int getNDimensions() const { return nDimensions; }
+
+        virtual std::vector<double> generatePoint(int i) = 0;
+
+        int getNDimensions() const { return nDimensions; }
         double getModOmega() const { return modOmega; }
         const char* getFunction() const { return function; }
 
     protected:
-        char function[50];
+        char function[50]{};
         int nDimensions{};
         double modOmega{};
 };

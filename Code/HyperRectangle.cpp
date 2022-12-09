@@ -6,6 +6,7 @@
 #include <fstream>
 #include <random>
 #include <string>
+#include "mpi.h"
 
 
 class HyperRectangle : public Geometry{
@@ -23,6 +24,8 @@ class HyperRectangle : public Geometry{
 
             for (int i = 0; i < nDimensions; ++i) {
                 inFile >> bounds.at(i).first >> bounds.at(i).second;
+                if(bounds.at(i).first == bounds.at(i).second)
+                    exit(-1);
                 if(bounds.at(i).first > bounds.at(i).second)
                     std::swap(bounds.at(i).first, bounds.at(i).second);
             }
@@ -31,10 +34,13 @@ class HyperRectangle : public Geometry{
             calculateModOmega();
         }
 
-        std::vector<double> generatePoint(int rank, int i) override{
+        std::vector<double> generatePoint(int i) override{
             std::vector<double> point;
             point.reserve(nDimensions);
             point.resize(nDimensions);
+
+            int rank;
+            MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
             const int seed = (rank + 1) * (i + 1);
             std::mt19937 engine(seed);

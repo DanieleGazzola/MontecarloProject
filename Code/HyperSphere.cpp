@@ -7,6 +7,7 @@
 #include <cmath>
 #include <random>
 #include <string>
+#include "mpi.h"
 
 class HyperSphere : public Geometry{
 public:
@@ -14,15 +15,18 @@ public:
         std::ifstream inFile;
         inFile.open(filename, std::ios_base::in);
 
-        char *f = nullptr;
-        inFile >> f;
-
+        inFile >> function;
+        //std::cout << function << std::endl;
         inFile >> nDimensions;
+        //std::cout << nDimensions << std::endl;
         centre.reserve(nDimensions);
         centre.resize(nDimensions);
         bounds.reserve(nDimensions);
         bounds.resize(nDimensions);
+
         inFile >> radius;
+        if(radius == 0.)
+            exit(-1);
 
         for (int i = 0; i < nDimensions; ++i){
             inFile >> centre.at(i);
@@ -34,10 +38,13 @@ public:
         calculateModOmega();
     }
 
-    std::vector<double> generatePoint(int rank, int i) override{
+    std::vector<double> generatePoint(int i) override{
         std::vector<double> point;
         point.reserve(nDimensions);
         point.resize(nDimensions);
+
+        int rank;
+        MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
         bool checkPoint = true;
         int x = 0;

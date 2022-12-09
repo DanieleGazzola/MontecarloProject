@@ -17,39 +17,38 @@ class Montecarlo {
         void integrate(Geometry* domain, long N){
             int rank, size;
 
-            MPI_Init(nullptr, nullptr);
             MPI_Comm_rank(MPI_COMM_WORLD, &rank);
             MPI_Comm_size(MPI_COMM_WORLD, &size);
+
             MPI_Bcast(&N, 1, MPI_LONG, 0, MPI_COMM_WORLD);
 
             const long mySamples = N / size + (rank < (N % size));
             double mySum = 0.;
             double mySumSquared = 0.;
-            double point[domain->getNDimensions()];
-            const char* var[5] = {"a", "b", "c", "d", "e"};
             std::vector<double> sample(domain->getNDimensions());
 
-            //Parser initialization
-            mu::Parser parser;
-            parser.SetExpr(domain->getFunction());
-            for(int i=0; i<domain->getNDimensions(); ++i){
-                parser.DefineVar(var[i], &point[i]);
-            }
+                //Parser initialization
+                mu::Parser parser;
+                parser.SetExpr(domain->getFunction());
 
-            //#pragma omp parallel for default(none) firstprivate(mySamples, domain, rank, f) reduction(+ : mySum , mySumSquared)
-            for (int i = 0; i < mySamples; ++i) {
-                sample = domain->generatePoint(rank, i);
-                for(int j = 0; j < domain->getNDimensions(); ++j){
-                    point[j] = sample[j];
+                #pragma omp parallel for default(none) lastprivate(sample) firstprivate(mySamples, domain, rank, parser) reduction(+ : mySum , mySumSquared)
+                for (int i = 0; i < mySamples; ++i) {
+                    sample = domain->generatePoint(i);
+
+                    char x = 'x';
+                    for (int j = 0; j < domain->getNDimensions(); ++j) {
+                        std::string arg(1, x);
+                        arg += std::to_string(j + 1);
+                        parser.DefineVar(arg, &sample.at(j));
+                    }
+
+                    auto fi = parser.Eval();
+
+                    if(!std::isnan(fi)){
+                        mySum += fi;
+                        mySumSquared += fi * fi;
+                    }
                 }
-    
-                auto fi = parser.Eval();
-                //std::cout << fi << " < " << 1 + sample[0] * sample[1] << " < " << sample[0] << " < " << sample[1] << std::endl;
-                if(!std::isnan(fi)){
-                    mySum += fi;
-                    mySumSquared += fi * fi;
-                }
-            }
 
             if(rank != 0){
                 MPI_Send(&mySum, 1, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD);
@@ -68,9 +67,6 @@ class Montecarlo {
                 integral = domain->getModOmega() * mySum / N;
                 variance = domain->getModOmega() * domain->getModOmega() * ((mySumSquared - (mySum * mySum) / N) / (N - 1)) / N;
             }
-
-            MPI_Finalize();
-
         };
 
         double getIntegral() const { return integral; }

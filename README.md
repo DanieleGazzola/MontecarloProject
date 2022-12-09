@@ -8,12 +8,6 @@ make
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/jellyfish/shared-folder/MontecarloProject/muparser-2.3.4
 ```
 
-To use the muparser library, you should include it when compiling the program as follow:
-```
-g++ -I../muparser-2.3.4/include prova.cpp -o prova -L../muparser-2.3.4 -lmuparser
-./prova
-```
-
 ## Command line arguments
 ---
 ```
@@ -38,6 +32,6 @@ In case of Hyper-Sphere - successive row:
 ## Compiling Example
 ---
 ```
-mpic++ -I../muparser-2.3.4/include main.cpp -o main -L../muparser-2.3.4 -lmuparser -Wall
-./main 0 10 ../input 
+mpicc -I../muparser-2.3.4/include main.cpp -o main -L../muparser-2.3.4 -lmuparser -lstdc++ -lm -fopenmp -Wall
+mpiexec -n 4 main 0 1000000 "../input" 
 ```
