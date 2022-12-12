@@ -32,6 +32,7 @@ In case of Hyper-Sphere - successive row:
 ## Compiling Example
 ---
 ```
-mpicc -I../muparser-2.3.4/include main.cpp -o main -L../muparser-2.3.4 -lmuparser -lstdc++ -lm -fopenmp -Wall
-mpiexec -n 4 main 0 1000000 "../input" 
+cd Code/
+make
+mpiexec -n 4 ./main 0 100000 "input" 
 ```
