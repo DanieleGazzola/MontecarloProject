@@ -50,22 +50,13 @@ class Montecarlo {
                     }
                 }
 
-            if(rank != 0){
-                MPI_Send(&mySum, 1, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD);
-                MPI_Send(&mySumSquared, 1, MPI_DOUBLE, 0, 1, MPI_COMM_WORLD);
-            } else {
-                for (int i = 1; i < size; ++i) {
-                    double temp1, temp2;
-                    MPI_Recv(&temp1, 1, MPI_DOUBLE, i, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-                    MPI_Recv(&temp2, 1, MPI_DOUBLE, i, 1, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-                    mySum += temp1;
-                    mySumSquared += temp2;
-                }
-            }
+            double sum = 0, sumSquared = 0;
+            MPI_Reduce(&mySum, &sum, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+            MPI_Reduce(&mySumSquared, &sumSquared, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
 
             if(rank == 0){
-                integral = domain->getModOmega() * mySum / N;
-                variance = domain->getModOmega() * domain->getModOmega() * ((mySumSquared - (mySum * mySum) / N) / (N - 1)) / N;
+                integral = domain->getModOmega() * sum / N;
+                variance = domain->getModOmega() * domain->getModOmega() * ((sumSquared - (sum * sum) / N) / (N - 1)) / N;
             }
         };
 
