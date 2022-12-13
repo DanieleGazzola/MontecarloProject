@@ -11,7 +11,7 @@
 
 class HyperSphere : public Geometry{
 public:
-    explicit HyperSphere (char *filename){
+    explicit HyperSphere (std::string filename){
         std::ifstream inFile;
         inFile.open(filename, std::ios_base::in);
 
@@ -19,58 +19,53 @@ public:
         //std::cout << function << std::endl;
         inFile >> nDimensions;
         //std::cout << nDimensions << std::endl;
+        inFile >> radius;
+
         centre.reserve(nDimensions);
         centre.resize(nDimensions);
-        inFile >> radius;
+        bounds.reserve(nDimensions);
+        bounds.resize(nDimensions);
+
         if(radius == 0.)
             exit(-1);
 
-        for (int i = 0; i < nDimensions; ++i)
+        for (int i = 0; i < nDimensions; ++i){
             inFile >> centre.at(i);
-
-        inFile.close();
-        calculateModOmega();
-    }
-
-    std::vector<double> generatePoint(int i) override{
-        std::vector<double> point;
-        std::vector<double> angles;
-        double pointRadius;
+            bounds.at(i).first = centre.at(i) - radius;
+            bounds.at(i).second = centre.at(i) + radius;
+        }
 
         int rank;
         MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+        engine.seed(rank);
 
+        inFile.close();
+
+        if(rank == 0)
+            calculateModOmega();
+    }
+
+    std::vector<double> generatePoint() override{
+        std::vector<double> point;
         point.reserve(nDimensions);
         point.resize(nDimensions);
-        angles.reserve(nDimensions - 1);
-        angles.resize(nDimensions - 1);
 
-        const int seed = (rank + 1) * (i + 1);
-        std::mt19937 engine(seed);
-        std::uniform_real_distribution<double> distributionRadius(0., radius);
-        pointRadius = distributionRadius(engine);
+        bool checkPoint = true;
+        double sum;
 
-        for (int j = 0; j < nDimensions - 1; ++j) {
-            if(j == nDimensions - 2){
-                std::uniform_real_distribution<double> distribution(0., 2. * M_PI);
-                angles.at(j) = distribution(engine);
-            } else {
-                std::uniform_real_distribution<double> distribution(0., M_PI);
-                angles.at(j) = distribution(engine);
+        do{
+            sum = 0.;
+
+            for (int j = 0; j < nDimensions; ++j){
+                std::uniform_real_distribution<double> distribution(bounds.at(j).first, bounds.at(j).second);
+                point.at(j) = distribution(engine);
+                sum += (point.at(j) - centre.at(j)) * (point.at(j) - centre.at(j));
             }
-        }
 
-        for (int j = 0; j < nDimensions; ++j) {
-            point.at(j) = pointRadius;
-            for (int k = 0; k < j; ++k)
-                point.at(j) *= std::sin(angles.at(k));
-            if(j != nDimensions - 1)
-                point.at(j) *= std::cos(angles.at(j));
-        }
+            if(sum <= radius * radius)
+                checkPoint = false;
 
-        for (int j = 0; j < nDimensions; ++j) {
-            point.at(j) += centre.at(j);
-        }
+        } while(checkPoint);
 
         return point;
     }
@@ -78,6 +73,7 @@ public:
 private:
     double radius{};
     std::vector<double> centre;
+    std::vector<std::pair<double, double>> bounds;
 
     void calculateModOmega(){
         double hyperVolume = 1.;

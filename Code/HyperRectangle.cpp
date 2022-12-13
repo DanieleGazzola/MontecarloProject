@@ -11,7 +11,7 @@
 
 class HyperRectangle : public Geometry{
     public:
-        explicit HyperRectangle (char *filename){
+        explicit HyperRectangle (std::string filename){
             std::ifstream inFile;
             inFile.open(filename, std::ios_base::in);
 
@@ -30,20 +30,20 @@ class HyperRectangle : public Geometry{
                     std::swap(bounds.at(i).first, bounds.at(i).second);
             }
 
+            int rank;
+            MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+            engine.seed(rank);
+
             inFile.close();
-            calculateModOmega();
+
+            if(rank == 0)
+                calculateModOmega();
         }
 
-        std::vector<double> generatePoint(int i) override{
+        std::vector<double> generatePoint() override{
             std::vector<double> point;
             point.reserve(nDimensions);
             point.resize(nDimensions);
-
-            int rank;
-            MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-
-            const int seed = (rank + 1) * (i + 1);
-            std::mt19937 engine(seed);
 
             for (int j = 0; j < nDimensions; ++j){
                 std::uniform_real_distribution<double> distribution(bounds.at(j).first, bounds.at(j).second);

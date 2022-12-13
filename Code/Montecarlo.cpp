@@ -9,12 +9,13 @@
 #include "Geometry.hpp"
 #include "mpi.h"
 #include "muParser.h"
+#include <omp.h>
 
 class Montecarlo {
     public:
         Montecarlo() = default;
         
-        void integrate(Geometry* domain, long N){
+        void integrate(std::shared_ptr<Geometry> domain, long N){
             int rank, size;
 
             MPI_Comm_rank(MPI_COMM_WORLD, &rank);
@@ -27,28 +28,25 @@ class Montecarlo {
             double mySumSquared = 0.;
             std::vector<double> sample(domain->getNDimensions());
 
-                //Parser initialization
-                mu::Parser parser;
-                parser.SetExpr(domain->getFunction());
+            //Parser initialization
+            mu::Parser parser;
+            parser.SetExpr(domain->getFunction());
 
-                #pragma omp parallel for default(none) lastprivate(sample) firstprivate(mySamples, domain, rank, parser) reduction(+ : mySum , mySumSquared)
-                for (int i = 0; i < mySamples; ++i) {
-                    sample = domain->generatePoint(i);
+            #pragma omp parallel for num_threads(12) default(none) lastprivate(sample) firstprivate(mySamples, domain, rank, parser) reduction(+ : mySum , mySumSquared)
+            for (int i = 0; i < mySamples; ++i) {
+                sample = domain->generatePoint();
 
-                    char x = 'x';
-                    for (int j = 0; j < domain->getNDimensions(); ++j) {
-                        std::string arg(1, x);
-                        arg += std::to_string(j + 1);
-                        parser.DefineVar(arg, &sample.at(j));
-                    }
-
-                    auto fi = parser.Eval();
-
-                    if(!std::isnan(fi)){
-                        mySum += fi;
-                        mySumSquared += fi * fi;
-                    }
+                for (int j = 0; j < domain->getNDimensions(); ++j) {
+                    std::string arg = "x";
+                    arg += std::to_string(j + 1);
+                    parser.DefineVar(arg, &sample.at(j));
                 }
+
+                auto fi = parser.Eval();
+
+                mySum += fi;
+                mySumSquared += fi * fi;
+            }
 
             double sum = 0, sumSquared = 0;
             MPI_Reduce(&mySum, &sum, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);

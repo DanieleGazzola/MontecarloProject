@@ -23,19 +23,23 @@ int main(int argc, char** argv){
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
 
-    auto domainType = strtol(argv[1], nullptr, 10);
-    auto N = strtol(argv[2], nullptr, 10);
+    const auto domainType = std::strtol(argv[1], nullptr, 10);
+    const auto N = std::strtol(argv[2], nullptr, 10);
 
     Montecarlo montecarlo{};
-    Geometry* domain;
+    std::shared_ptr<Geometry> domain;
 
-    switch(domainType){
-        case 0:
-            domain = new HyperRectangle(argv[3]);
+    switch(domainType) {
+        case 0: {
+            HyperRectangle *rectangle = new HyperRectangle(argv[3]);
+            domain.reset(rectangle);
             break;
-        case 1:
-            domain = new HyperSphere(argv[3]);
+        }
+        case 1: {
+            HyperSphere* sphere = new HyperSphere(argv[3]);
+            domain.reset(sphere);
             break;
+        }
         default:
             return -1;
     }
@@ -48,7 +52,8 @@ int main(int argc, char** argv){
 
     if(rank == 0){
         std::cout << "Integral: " << montecarlo.getIntegral() << std::endl
-                  << "Estimated error: " << std::sqrt(montecarlo.getVariance()) << std::endl;
+                  << "Estimated error: " << std::sqrt(montecarlo.getVariance()) << std::endl
+                  << "Target error: " << montecarlo.getIntegral() / std::sqrt(N) << std::endl;
         std::cout << "Domain dimension: " << domain->getNDimensions() << std::endl
                   << "Domain volume: " << domain->getModOmega() << std::endl;
         std::cout << "Elapsed time: " << elapsed_seconds.count() << " s" << std::endl;
