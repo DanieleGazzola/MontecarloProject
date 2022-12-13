@@ -68,6 +68,10 @@ public:
                 point.at(j) *= std::cos(angles.at(j));
         }
 
+        for (int j = 0; j < nDimensions; ++j) {
+            point.at(j) += centre.at(j);
+        }
+
         return point;
     }
 
@@ -79,8 +83,8 @@ private:
         double hyperVolume = 1.;
 
         hyperVolume *= std::pow(radius, nDimensions);
-        hyperVolume *= std::pow(M_PI, (nDimensions / 2));
-        hyperVolume /= std::tgamma((nDimensions / 2) + 1);
+        hyperVolume *= std::pow(M_PI, (nDimensions / 2.));
+        hyperVolume /= std::tgamma((nDimensions / 2.) + 1);
 
         modOmega = hyperVolume;
     }
