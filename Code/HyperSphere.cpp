@@ -21,18 +21,12 @@ public:
         //std::cout << nDimensions << std::endl;
         centre.reserve(nDimensions);
         centre.resize(nDimensions);
-        bounds.reserve(nDimensions);
-        bounds.resize(nDimensions);
-
         inFile >> radius;
         if(radius == 0.)
             exit(-1);
 
-        for (int i = 0; i < nDimensions; ++i){
+        for (int i = 0; i < nDimensions; ++i)
             inFile >> centre.at(i);
-            bounds.at(i).first = centre.at(i) - radius;
-            bounds.at(i).second = centre.at(i) + radius;
-        }
 
         inFile.close();
         calculateModOmega();
@@ -40,33 +34,39 @@ public:
 
     std::vector<double> generatePoint(int i) override{
         std::vector<double> point;
-        point.reserve(nDimensions);
-        point.resize(nDimensions);
+        std::vector<double> angles;
+        double pointRadius;
 
         int rank;
         MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-        bool checkPoint = true;
-        int x = 0;
-        double sum;
+        point.reserve(nDimensions);
+        point.resize(nDimensions);
+        angles.reserve(nDimensions - 1);
+        angles.resize(nDimensions - 1);
 
-        do{
-            sum = 0.;
-            x++;
-            const int seed = (rank + 1) * (i + 1) * (x + 1);
-            std::mt19937 engine(seed);
+        const int seed = (rank + 1) * (i + 1);
+        std::mt19937 engine(seed);
+        std::uniform_real_distribution<double> distributionRadius(0., radius);
+        pointRadius = distributionRadius(engine);
 
-            for (int j = 0; j < nDimensions; ++j){
-                std::uniform_real_distribution<double> distribution(bounds.at(j).first, bounds.at(j).second);
-                point.at(j) = distribution(engine);
-                sum += (point.at(j) - centre.at(j)) * (point.at(j) - centre.at(j));
+        for (int j = 0; j < nDimensions - 1; ++j) {
+            if(j == nDimensions - 2){
+                std::uniform_real_distribution<double> distribution(0., 2. * M_PI);
+                angles.at(j) = distribution(engine);
+            } else {
+                std::uniform_real_distribution<double> distribution(0., M_PI);
+                angles.at(j) = distribution(engine);
             }
+        }
 
-            if(sum <= radius * radius)
-                checkPoint = false;
-
-
-        } while(checkPoint);
+        for (int j = 0; j < nDimensions; ++j) {
+            point.at(j) = pointRadius;
+            for (int k = 0; k < j; ++k)
+                point.at(j) *= std::sin(angles.at(k));
+            if(j != nDimensions - 1)
+                point.at(j) *= std::cos(angles.at(j));
+        }
 
         return point;
     }
@@ -74,7 +74,6 @@ public:
 private:
     double radius{};
     std::vector<double> centre;
-    std::vector<std::pair<double, double>> bounds;
 
     void calculateModOmega(){
         double hyperVolume = 1.;
