@@ -50,7 +50,12 @@ class Montecarlo {
                     }
                 }
 
-            if(rank != 0){
+                // I am not sure if you can have the send buffer equal to the receive buffer,
+                // but I do not see why not. If it does not work use a different variable for
+                // the reception.
+                MPI_Reduce(&mySum,&mySum,1,MPI_DOUBLE,MPI_SUM,0,MPI_COMM_WORLD);
+                MPI_Reduce(&mySumSquared,&mySumSquared,1,MPI_DOUBLE,MPI_SUM,0,MPI_COMM_WORLD);
+ /*           if(rank != 0){
                 MPI_Send(&mySum, 1, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD);
                 MPI_Send(&mySumSquared, 1, MPI_DOUBLE, 0, 1, MPI_COMM_WORLD);
             } else {
@@ -62,7 +67,7 @@ class Montecarlo {
                     mySumSquared += temp2;
                 }
             }
-
+*/
             if(rank == 0){
                 integral = domain->getModOmega() * mySum / N;
                 variance = domain->getModOmega() * domain->getModOmega() * ((mySumSquared - (mySum * mySum) / N) / (N - 1)) / N;

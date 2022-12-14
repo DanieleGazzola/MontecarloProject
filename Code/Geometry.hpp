@@ -18,7 +18,7 @@ class Geometry {
         int getNDimensions() const { return nDimensions; }
         double getModOmega() const { return modOmega; }
         const char* getFunction() const { return function; }
-
+        ~Geometry()=default;
     protected:
         char function[50]{};
         int nDimensions{};

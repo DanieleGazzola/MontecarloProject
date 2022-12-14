@@ -1,0 +1,20 @@
+1. If you use polymorphism base classes should have a virtual destructor in the base class. And here is necessary because
+the derived class adds some extra data members!
+
+2. Are you sure you cannot use collective communication instead of nested send and receive in Montecarlo.cpp. 
+In general, collective communications are faster. It looks you are doing a reduction here. Try to see if my modification
+works.
+
+You can also join the two variables in a single vector (you have to include <array>):
+
+std::array<double,2> localSum{mySum,mySumSquared};
+std::array<double,2> globalSum; // maybe you can use directly localsum...
+
+MPI_Reduce(localSum.data(),globalSum.data,2,MPI_DOUBLE,MPI_SUM,0,MPI_COMM_WORLD);
+
+In globalSum in the rank 0 process you have the final values of the sum and sumsquared.
+
+
+
+
+
