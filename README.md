@@ -16,6 +16,7 @@ Domain type:
     1- Hyper-Sphere
 Number of samples
 Input file path
+Number of threads for openMP
 ```
 
 ## Input file arguments
@@ -34,5 +35,5 @@ In case of Hyper-Sphere - successive row:
 ```
 cd Code/
 make
-mpiexec -n 4 ./main 0 100000 "input" 
+mpiexec -n 4 ./main 0 100000 "input" 12
 ```

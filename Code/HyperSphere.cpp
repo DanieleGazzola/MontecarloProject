@@ -11,7 +11,7 @@
 
 class HyperSphere : public Geometry{
 public:
-    explicit HyperSphere (char *filename){
+    explicit HyperSphere (std::string filename){
         std::ifstream inFile;
         inFile.open(filename, std::ios_base::in);
 
@@ -19,12 +19,13 @@ public:
         //std::cout << function << std::endl;
         inFile >> nDimensions;
         //std::cout << nDimensions << std::endl;
+        inFile >> radius;
+
         centre.reserve(nDimensions);
         centre.resize(nDimensions);
         bounds.reserve(nDimensions);
         bounds.resize(nDimensions);
 
-        inFile >> radius;
         if(radius == 0.)
             exit(-1);
 
@@ -34,27 +35,26 @@ public:
             bounds.at(i).second = centre.at(i) + radius;
         }
 
+        int rank;
+        MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+        engine.seed(rank);
+
         inFile.close();
-        calculateModOmega();
+
+        if(rank == 0)
+            calculateModOmega();
     }
 
-    std::vector<double> generatePoint(int i) override{
+    std::vector<double> generatePoint() override{
         std::vector<double> point;
         point.reserve(nDimensions);
         point.resize(nDimensions);
 
-        int rank;
-        MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-
         bool checkPoint = true;
-        int x = 0;
         double sum;
 
         do{
             sum = 0.;
-            x++;
-            const int seed = (rank + 1) * (i + 1) * (x + 1);
-            std::mt19937 engine(seed);
 
             for (int j = 0; j < nDimensions; ++j){
                 std::uniform_real_distribution<double> distribution(bounds.at(j).first, bounds.at(j).second);
@@ -64,7 +64,6 @@ public:
 
             if(sum <= radius * radius)
                 checkPoint = false;
-
 
         } while(checkPoint);
 
@@ -80,8 +79,8 @@ private:
         double hyperVolume = 1.;
 
         hyperVolume *= std::pow(radius, nDimensions);
-        hyperVolume *= std::pow(M_PI, (nDimensions / 2));
-        hyperVolume /= std::tgamma((nDimensions / 2) + 1);
+        hyperVolume *= std::pow(M_PI, (nDimensions / 2.));
+        hyperVolume /= std::tgamma((nDimensions / 2.) + 1);
 
         modOmega = hyperVolume;
     }

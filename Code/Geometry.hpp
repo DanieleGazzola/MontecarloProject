@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <random>
 
 #ifndef MONTECARLOPROJECT_GEOMETRY_H
 #define MONTECARLOPROJECT_GEOMETRY_H
@@ -12,17 +13,19 @@
 class Geometry {
     public:
         Geometry()= default;
+        ~Geometry() = default;
 
-        virtual std::vector<double> generatePoint(int i) = 0;
+        virtual std::vector<double> generatePoint() = 0;
 
         int getNDimensions() const { return nDimensions; }
         double getModOmega() const { return modOmega; }
-        const char* getFunction() const { return function; }
+        const std::string getFunction() const { return function; }
 
     protected:
-        char function[50]{};
+        std::string function{};
         int nDimensions{};
         double modOmega{};
+        std::mt19937 engine;
 };
 
 #endif //MONTECARLOPROJECT_GEOMETRY_H
