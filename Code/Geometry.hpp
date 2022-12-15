@@ -13,6 +13,7 @@
 class Geometry {
     public:
         Geometry()= default;
+        ~Geometry() = default;
 
         virtual std::vector<double> generatePoint() = 0;
 
